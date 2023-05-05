@@ -79,9 +79,3 @@ function Get-FileShareAccessRights {
     $accessRights = Get-AccessRightsRecursively -Path $NetworkSharePath
     return $accessRights
 }
-
-# Define the network share path
-$NetworkSharePath = "\\dc01.pwnyfarm.local\SYSVOL"
-
-# Call the function for the network share path
-Get-FileShareAccessRights -NetworkSharePath $NetworkSharePath
