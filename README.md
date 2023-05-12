@@ -27,5 +27,14 @@ $interestingSharePermissionsOverview = $interestingSharePermissions | Group-Obje
 $interestingSharePermissionsOverview
 ```
 
+Finally, you can filter for intersting user/groups:
+```
+$interestingSharePermissions = $sharepermissions | Where-Object {
+ ( $_.Username.Contains("lmueller")) -and
+ (($_.AccessRight -eq "Write"))
+}
+```
+
+
 ## Todo
 - Make the queries language independent by using well known SIDs
