@@ -29,7 +29,7 @@ $interestingSharePermissionsOverview
 
 Finally, you can filter for intersting user/groups:
 ```
-$interestingSharePermissions = $sharepermissions | Where-Object {
+$sharepermissions | Where-Object {
  ( $_.Username.Contains("lmueller")) -and
  (($_.AccessRight -eq "Write"))
 }
