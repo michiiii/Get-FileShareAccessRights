@@ -18,12 +18,14 @@ $interestingSharePermissions = $sharepermissions | Where-Object {
 (( -not $_.Username.Contains("Administrator")) -and ( -not $_.Username.Contains("NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS")) -and ( -not $_.Username.Contains("CREATOR OWNER")) -and ( -not $_.Username.Contains("Admins")) -and ($_.Username -ne "NT AUTHORITY\SYSTEM") -and ($_.Username -ne "S-1-5-32-549") -and ($_.Username -ne "pwnyfarm\Group Policy Creator Owners")) -and
 (($_.AccessRight -eq "Write"))
 }
+$interestingSharePermissions | ft
 ```
 
 Following that I want to create an overview of which users have how many write permissions
 
 ```
 $interestingSharePermissionsOverview = $interestingSharePermissions | Group-Object -Property Username | Select-Object Name, Count
+$interestingSharePermissionsOverview
 ```
 
 ## Todo
