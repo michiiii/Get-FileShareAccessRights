@@ -5,7 +5,7 @@ This script lists all access rights for each file and folder on the specified ne
 
 ## Example
 ```
-Get-FileShareAccessRights -NetworkSharePath "\\dc01.pwnyfarm.local\SYSVOL"
+$sysvolaccess = Get-FileShareAccessRights -NetworkSharePath "\\dc01.pwnyfarm.local\SYSVOL"
 ```
 
 ## Example analysis
