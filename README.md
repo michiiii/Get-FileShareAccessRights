@@ -36,4 +36,4 @@ $sharepermissions | Where-Object {
 
 
 ## Todo
-- Make the queries language independent by using well known SIDs
+- Make the queries language independent by using well known SIDs to filter out default build-in groups
