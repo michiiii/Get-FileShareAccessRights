@@ -17,7 +17,6 @@ $sharePermissions = Get-FileShareAccessRights -NetworkSharePath "\\dc01.pwnyfarm
 $interestingSharePermissions = $sharepermissions | Where-Object {
 (($_.AccessRight -eq "Write"))
 }
-$interestingSharePermissions | ft
 ```
 
 Following that I want to create an overview of which users have how many write permissions
