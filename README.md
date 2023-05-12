@@ -19,7 +19,7 @@ $interesingSharePermissions = $sharepermissions | Where-Object {
 Following that I want to create an overview of which users have how many write permissions
 
 ```
-$interesingsharepermissionOverview = $interesingSharePermissions | Group-Object -Property Username | Select-Object Name, Count
+$interesingSharePermissionsOverview = $interesingSharePermissions | Group-Object -Property Username | Select-Object Name, Count
 ```
 
 ## Todo
