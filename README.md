@@ -15,3 +15,6 @@ $sysvolaccess | Where-Object {
 (($_.AccessRight -eq "Write"))
 }
 ```
+
+## Todo
+- Make the queries language independent by using well known SIDs
