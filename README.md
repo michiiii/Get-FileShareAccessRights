@@ -37,3 +37,5 @@ $sharepermissions | Where-Object {
 
 ## Todo
 - Make the queries language independent by using well known SIDs to filter out default build-in groups
+- Don´t collect "default" permissions to speed up the process
+- Create a flag to remove the inheritance check
