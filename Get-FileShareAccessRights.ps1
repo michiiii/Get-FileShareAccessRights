@@ -76,3 +76,45 @@ function Get-FileShareAccessRights {
     $accessRights = Get-AccessRightsRecursively -Path $NetworkSharePath
     return $accessRights
 }
+
+# This function is to check a single file
+function Get-FileDACL {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$filePath
+    )
+
+    # Check if file exists
+    if (-Not (Test-Path $filePath -PathType Leaf)) {
+        Write-Warning "File does not exist: $filePath"
+        return
+    }
+
+    # Get the DACL
+    try {
+        $acl = Get-Acl -Path $filePath
+    }
+    catch {
+        Write-Warning "Failed to get ACL for: $filePath"
+        Write-Warning $_.Exception.Message
+        return
+    }
+
+    # Create and output an object for each ACE
+    $aclObjectArray = @()
+    foreach ($ace in $acl.Access) {
+        $aclObject = [PSCustomObject]@{
+            FilePath           = $filePath
+            IdentityReference  = $ace.IdentityReference
+            AccessControlType  = $ace.AccessControlType
+            FileSystemRights   = $ace.FileSystemRights
+            IsInherited        = $ace.IsInherited
+            InheritanceFlags   = $ace.InheritanceFlags
+            PropagationFlags   = $ace.PropagationFlags
+        }
+        $aclObjectArray += $aclObject
+    }
+    
+    return $aclObjectArray
+}
