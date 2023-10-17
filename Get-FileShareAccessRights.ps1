@@ -15,26 +15,6 @@ function Get-FileShareAccessRights {
         return $AccessRights
     }
 
-    function Get-InheritanceSource {
-        param (
-            [string]$Path,
-            [string]$Username
-        )
-
-        while ($Path -ne (Split-Path -Path $Path -Parent)) {
-            $Path = Split-Path -Path $Path -Parent
-            if ($null -ne $Path -and (Test-Path -Path $Path -PathType Container)) {
-                $Acl = Get-Acl -Path $Path
-                foreach ($AccessRule in $Acl.Access) {
-                    if ($AccessRule.IdentityReference.Value -eq $Username -and !$AccessRule.IsInherited) {
-                        return $Path
-                    }
-                }
-            }
-        }
-        return $null
-    }
-
     function Get-AccessRightsRecursively {
         param (
             [string]$Path
@@ -52,12 +32,9 @@ function Get-FileShareAccessRights {
                 $AccessRights = Convert-AccessRightsToArray -Rights $AccessRule.FileSystemRights
                 $IsInherited = $AccessRule.IsInherited
 
-                $InheritanceSource = if ($IsInherited) { Get-InheritanceSource -Path $Path -Username $Username } else { $null }
-
                 foreach ($Right in $AccessRights) {
                     [PSCustomObject]@{
                         Path                = $Path
-                        InheritanceSource   = $InheritanceSource
                         Username            = $Username
                         AccessRight         = $Right
                         IsInherited         = $IsInherited
