@@ -37,7 +37,7 @@ function Get-FileShareCriticalPermissions {
     # Recursively gathers access rights from files and directories
     function Get-AccessRightsRecursively {
         param (
-            [string]$Path
+            [string]$NetworkSharePath
         )
 
         function Gather-AccessRights {
@@ -77,10 +77,10 @@ function Get-FileShareCriticalPermissions {
             }
         }
         Write-Host $Path
-        return Gather-AccessRights -ItemPath $Path
+        return Gather-AccessRights -NetworkSharePath $NetworkSharePath
     }
     Write-Host $NetworkSharePath
-    return Get-AccessRightsRecursively -Path $NetworkSharePath
+    return Get-AccessRightsRecursively -NetworkSharePath $NetworkSharePath
 }
 
 
