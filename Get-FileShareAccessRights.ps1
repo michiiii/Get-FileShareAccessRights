@@ -56,11 +56,12 @@ function Get-FileShareCriticalPermissions {
                 # $UserSID -match '-520$' -> Group Policy Creator Owners
                 # $UserSID -match '-512$' -> Domain Admins
                 # $UserSID -match '-512$' -> Enterprise admins
-                if (($UserSID -like "*S-1-5-32-544") -or 
-                     $UserSID -eq "S-1-5-18" -or
-                     $UserSID -match '-520$' -or
-                     $UserSID -match '-512$' -or
-                     $UserSID -match '-519$'
+                if (
+                    ($UserSID -like "*S-1-5-32-544") -or 
+                    ($UserSID -eq "S-1-5-18") -or
+                    ($UserSID -match '-520$') -or
+                    ($UserSID -match '-512$') -or
+                    ($UserSID -match '-519$')
                      ) {
                     continue
                 }
