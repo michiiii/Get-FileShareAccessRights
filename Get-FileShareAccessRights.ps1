@@ -53,7 +53,7 @@ function Get-FileShareCriticalPermissions {
                 # Well known SIDs
                 # Netlogon
                 # $givenSID -match '-520$' 
-                if (($UserSID -eq "*S-1-5-32-544") -or 
+                if (($UserSID -eq "S-1-5-32-544") -or 
                      $UserSID -eq "S-1-5-18" -or
                      $UserSID -match '-520$'
                      ) {
