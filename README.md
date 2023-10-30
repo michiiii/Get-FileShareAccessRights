@@ -25,12 +25,15 @@ Retrieve the ACE´s for a specified network share path.
 $permissions = Get-FileShareCriticalPermissions -NetworkSharePath "\\pwnyfarm.local\netlogon"
 ```
 
+### Get-CriticalPermissionOverview
+
 Following that I want to create an overview of which users have how many write permissions
 
 ```powershell
 # See users that have potential critical rights
 Get-CriticalPermissionOverview -SharePermissions $permissions
 ```
+### Get-CriticalPermissionsByUser
 
 Finally, you can filter for intersting user/groups:
 ```powershell
@@ -52,16 +55,7 @@ Retrieve the owner and creator information from a network share path.
 Get-FileShareOwnershipAndCreator -NetworkSharePath "\\pwnyfarm.local\netlogon"
 ```
 
-## Notes
-- These functions were developed and tested in a Windows environment. Ensure you have the necessary permissions and dependencies before executing them.
-- Always test scripts and functions in a controlled environment before using them in production.
-
 ## Contributions
 
 Feel free to submit pull requests or issues if you identify any bugs or have suggestions for improvements.
 
-
-## Todo
-- Make the queries language independent by using well known SIDs to filter out default build-in groups
-- Don´t collect "default" permissions to speed up the process
-- Create a flag to remove the inheritance check
