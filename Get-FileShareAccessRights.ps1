@@ -22,7 +22,6 @@ function Get-FileShareAccessRights {
         [string]$NetworkSharePath
     )
 
-    # Converts enumerated access rights to a human-readable array.
     function Convert-AccessRightsToArray {
         param (
             [System.Security.AccessControl.FileSystemRights]$Rights
@@ -33,20 +32,17 @@ function Get-FileShareAccessRights {
                Where-Object { $RightsValue -band [int][System.Security.AccessControl.FileSystemRights]::$_ }
     }
 
-    # Recursively retrieves access rights for files and directories.
     function Get-AccessRightsRecursively {
         param (
             [string]$Path
         )
 
-        # Gathers access rights for the specified path.
         function Gather-AccessRights {
             param (
                 [string]$Path
             )
 
             $Acl = Get-Acl -Path $Path
-
             foreach ($AccessRule in $Acl.Access) {
                 $Username = $AccessRule.IdentityReference.Value
                 $AccessRights = Convert-AccessRightsToArray -Rights $AccessRule.FileSystemRights
@@ -61,7 +57,6 @@ function Get-FileShareAccessRights {
                 }
             }
 
-            # If the current path is a directory, evaluate its children.
             if (Test-Path -Path $Path -PathType Container) {
                 Get-ChildItem -Path $Path | ForEach-Object { Gather-AccessRights -Path $_.FullName }
             }
@@ -72,7 +67,6 @@ function Get-FileShareAccessRights {
 
     return Get-AccessRightsRecursively -Path $NetworkSharePath
 }
-
 
 <#
 .SYNOPSIS
@@ -95,29 +89,25 @@ Warnings will be emitted if:
 #>
 function Get-FileDACL {
     [CmdletBinding()]
-    param(
+    param (
         [Parameter(Mandatory=$true)]
         [string]$FilePath
     )
 
-    # Validates the existence of the file.
     if (-not (Test-Path -Path $FilePath -PathType Leaf)) {
         Write-Warning "File does not exist: $FilePath"
         return
     }
 
-    # Attempts to retrieve the DACL for the specified file.
     $acl = $null
     try {
         $acl = Get-Acl -Path $FilePath
-    }
-    catch {
+    } catch {
         Write-Warning "Failed to obtain ACL for: $FilePath"
         Write-Warning $_.Exception.Message
         return
     }
 
-    # Iterates through each ACE, creating a custom object for each and adding to the results array.
     return $acl.Access | ForEach-Object {
         [PSCustomObject]@{
             FilePath           = $FilePath
@@ -153,15 +143,10 @@ the actual file creator for every file type.
 function Get-FileShareOwnershipAndCreator {
     [CmdletBinding()]
     param (
-        [Parameter(
-            Mandatory=$true, 
-            Position=0, 
-            HelpMessage="The network share path to evaluate."
-        )]
+        [Parameter(Mandatory=$true, Position=0, HelpMessage="The network share path to evaluate.")]
         [string]$NetworkSharePath
     )
 
-    # Helper function to retrieve the 'Creator' of the file.
     function Get-Creator {
         param (
             [string]$Path
@@ -170,18 +155,15 @@ function Get-FileShareOwnershipAndCreator {
         $creator = $null
         try {
             $shell = New-Object -ComObject Shell.Application
-            $folder = $shell.Namespace((Get-Item $Path -ErrorAction SilentlyContinue).DirectoryName)
-            $file = $folder.ParseName((Get-Item $Path -ErrorAction SilentlyContinue).Name)
-            
-            # 10 corresponds to the 'Author' property for many file types in the shell.
+            $folder = $shell.Namespace((Get-Item $Path).DirectoryName)
+            $file = $folder.ParseName((Get-Item $Path).Name)
             $creator = $folder.GetDetailsOf($file, 10)
         } catch {
-            # Silently ignore errors, $creator remains $null
+            # Silently ignore errors
         }
         return $creator
     }
 
-    # Helper function to recursively gather ownership and creator details.
     function Gather-OwnershipAndCreator {
         param (
             [string]$Path
@@ -197,14 +179,11 @@ function Get-FileShareOwnershipAndCreator {
             Creator  = $Creator
         }
 
-        # If the current path is a directory, iterate over its children.
         if (Test-Path -Path $Path -PathType Container -ErrorAction SilentlyContinue) {
             Get-ChildItem -Path $Path -ErrorAction SilentlyContinue | 
                 ForEach-Object { Gather-OwnershipAndCreator -Path $_.FullName }
         }
     }
 
-    # Start the recursion from the provided network share path.
     return Gather-OwnershipAndCreator -Path $NetworkSharePath
 }
-
