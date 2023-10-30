@@ -51,11 +51,16 @@ function Get-FileShareCriticalPermissions {
 
                 # Exclude built-in Administrators and Local System SIDs
                 # Well known SIDs
-                # Netlogon
-                # $givenSID -match '-520$' 
+                # $UserSID -eq "S-1-5-18"-> Local System
+                # $UserSID -like '*S-1-5-32-544' -> Build-In Administratoren
+                # $UserSID -match '-520$' -> Group Policy Creator Owners
+                # $UserSID -match '-512$' -> Domain Admins
+                # $UserSID -match '-512$' -> Enterprise admins
                 if (($UserSID -like "*S-1-5-32-544") -or 
                      $UserSID -eq "S-1-5-18" -or
-                     $UserSID -match '-520$'
+                     $UserSID -match '-520$' -or
+                     $UserSID -match '-512$' -or
+                     $UserSID -match '-519$'
                      ) {
                     continue
                 }
