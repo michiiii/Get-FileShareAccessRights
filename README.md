@@ -26,14 +26,12 @@ $sharePermissions = Get-FileShareAccessRights -NetworkSharePath "\\pwnyfarm.loca
 Filter for interesting rights
 ```powershell
 $interestingSharePermissions = $sharepermissions | Where-Object {
-    ($_.AccessRight -eq "FullControl") -or
     ($_.AccessRight -eq "ChangePermissions") -or
     ($_.AccessRight -eq "TakeOwnership") -or
     ($_.AccessRight -eq "Write") -or
     ($_.AccessRight -eq "AppendData") -or
     ($_.AccessRight -eq "CreateFiles") -or
     ($_.AccessRight -eq "Delete") -or
-    ($_.AccessRight -eq "Modify") -or
     ($_.AccessRight -eq "WriteData") -or
     ($_.AccessRight -eq "WriteAttributes") -or
     ($_.AccessRight -eq "WriteExtendedAttributes")
@@ -51,14 +49,13 @@ Finally, you can filter for intersting user/groups:
 ```powershell
 $sharepermissions | Where-Object {
  ( $_.Username.Contains("Authenticated Users")) -and
- (($_.AccessRight -eq "FullControl") -or
+ (
     ($_.AccessRight -eq "ChangePermissions") -or
     ($_.AccessRight -eq "TakeOwnership") -or
     ($_.AccessRight -eq "Write") -or
     ($_.AccessRight -eq "AppendData") -or
     ($_.AccessRight -eq "CreateFiles") -or
     ($_.AccessRight -eq "Delete") -or
-    ($_.AccessRight -eq "Modify") -or
     ($_.AccessRight -eq "WriteData") -or
     ($_.AccessRight -eq "WriteAttributes") -or
     ($_.AccessRight -eq "WriteExtendedAttributes"))
