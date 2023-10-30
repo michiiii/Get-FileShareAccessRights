@@ -2,7 +2,7 @@
 
 This repository provides a collection of PowerShell functions that assist administrators and security auditors in evaluating network share permissions, Discretionary Access Control Lists (DACLs), and ownership details.
 
-The idea to this came after finding network file permission issues on SYSVOL and NETLOGON shares multiple times during security assessments.
+The idea to this came after finding file permission issues on SYSVOL and NETLOGON shares multiple times during security assessments.
 
 ## Functions
 
