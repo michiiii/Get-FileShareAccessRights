@@ -49,7 +49,7 @@ function Get-FileShareCriticalPermissions {
                 $Username = $AccessRule.IdentityReference.Value
                 $UserSID = $AccessRule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
 
-                # Exclude built-in Administrators and Local System SIDs
+                # Exclude well known SIDs
                 # Well known SIDs
                 # $UserSID -eq "S-1-5-18"-> Local System
                 # $UserSID -like "*S-1-3-0"-> Creator Owner
