@@ -76,7 +76,7 @@ function Get-FileShareCriticalPermissions {
                 Get-ChildItem -Path $ItemPath | ForEach-Object { Gather-AccessRights -Path $_.FullName }
             }
         }
-
+        Write-Host $Path
         return Gather-AccessRights -Path $Path
     }
     Write-Host $NetworkSharePath
