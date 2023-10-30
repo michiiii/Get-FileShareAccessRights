@@ -13,7 +13,7 @@ This repository provides a collection of PowerShell functions that assist admini
 ### Get-FileShareAccessRights
 
 Download and import
-```
+```powershell
 iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com/michiiii/Get-FileShareAccessRights/main/Get-FileShareAccessRights.ps1')
 ```
 
@@ -24,7 +24,7 @@ $sharePermissions = Get-FileShareAccessRights -NetworkSharePath "\\pwnyfarm.loca
 ```
 
 Filter for interesting rights
-```
+```powershell
 $interestingSharePermissions = $sharepermissions | Where-Object {
 (($_.AccessRight -eq "Write"))
 }
@@ -32,13 +32,13 @@ $interestingSharePermissions = $sharepermissions | Where-Object {
 
 Following that I want to create an overview of which users have how many write permissions
 
-```
+```powershell
 $interestingSharePermissionsOverview = $interestingSharePermissions | Group-Object -Property Username | Select-Object Name, Count
 $interestingSharePermissionsOverview
 ```
 
 Finally, you can filter for intersting user/groups:
-```
+```powershell
 $sharepermissions | Where-Object {
  ( $_.Username.Contains("lmueller")) -and
  (($_.AccessRight -eq "Write"))
