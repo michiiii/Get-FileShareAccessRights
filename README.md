@@ -14,7 +14,7 @@ This repository provides a collection of PowerShell functions that assist admini
 
 Download and import
 ```powershell
-iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com/michiiii/Get-FileShareCriticalPermissions/main/Get-FileShareCriticalPermissions.ps1')
+iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com/michiiii/Get-FileShareAccessRights/main/Get-FileShareAccessRights.ps1')
 ```
 
 Retrieve the access rights for a specified network share path.
