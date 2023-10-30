@@ -96,6 +96,86 @@ function Get-FileShareCriticalPermissions {
 
 <#
 .SYNOPSIS
+Provides an overview of critical permissions based on the input of SharePermissions.
+
+.DESCRIPTION
+This function processes an array of SharePermissions and returns an overview table grouped by Username.
+
+.PARAMETER SharePermissions
+An array of PowerShell objects representing SharePermissions, where each object must have a 'Username' property.
+
+.EXAMPLE
+$permissions = @(
+    [PSCustomObject]@{Username='User1'; AccessRight='Write'},
+    [PSCustomObject]@{Username='User2'; AccessRight='Read'},
+    [PSCustomObject]@{Username='User1'; AccessRight='Delete'}
+)
+Get-CriticalPermissionOverview -SharePermissions $permissions
+
+Output:
+Name  Count
+----  -----
+User1 2
+User2 1
+#>
+
+function Get-CriticalPermissionOverview {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [PSObject[]]$SharePermissions
+    )
+
+    # Group by Username and return the overview
+    return $SharePermissions | Group-Object -Property Username | Select-Object Name, Count
+}
+
+
+<#
+.SYNOPSIS
+Provides detailed critical permissions for a specified user based on the input of SharePermissions.
+
+.DESCRIPTION
+This function processes an array of SharePermissions and returns a detailed table of permissions for a specific user.
+
+.PARAMETER SharePermissions
+An array of PowerShell objects representing SharePermissions. Each object should contain properties like 'Path', 'Username', 'AccessRight', and 'IsInherited'.
+
+.PARAMETER UserName
+The name of the user for whom the critical permissions should be fetched.
+
+.EXAMPLE
+$permissions = @(
+    [PSCustomObject]@{Path="\\path1"; Username='User1'; AccessRight='Write'; IsInherited=$false},
+    [PSCustomObject]@{Path="\\path2"; Username='User2'; AccessRight='Read'; IsInherited=$true},
+    [PSCustomObject]@{Path="\\path3"; Username='User1'; AccessRight='Delete'; IsInherited=$false}
+)
+Get-CriticalPermissionByUser -SharePermissions $permissions -UserName "User1"
+
+Output:
+Path     Username AccessRight IsInherited
+----     -------- ----------- -----------
+\\path1  User1    Write       False      
+\\path3  User1    Delete      False      
+#>
+
+function Get-CriticalPermissionsByUser {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [PSObject[]]$SharePermissions,
+
+        [Parameter(Mandatory=$true)]
+        [string]$UserName
+    )
+
+    # Filter by UserName and return the detailed table
+    return $SharePermissions | Where-Object { $_.Username.Contains($UserName) } | Format-Table Path, Username, AccessRight, IsInherited -AutoSize
+}
+
+
+<#
+.SYNOPSIS
 Retrieves the Discretionary Access Control List (DACL) for a specified file.
 
 .DESCRIPTION
