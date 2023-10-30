@@ -59,7 +59,7 @@ function Get-FileShareCriticalPermissions {
                 # $UserSID -match '-512$' -> Enterprise admins
                 if (
                     ($UserSID -eq "S-1-5-18") -or
-                    ($UserSID -like "*S-1-3-0") -or
+                    ($UserSID -eq "S-1-3-0") -or
                     ($UserSID -like "*S-1-5-32-544") -or 
                     ($UserSID -match '-520$') -or
                     ($UserSID -match '-512$') -or
