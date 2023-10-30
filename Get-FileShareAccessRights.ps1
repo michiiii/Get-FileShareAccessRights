@@ -77,7 +77,7 @@ function Get-FileShareCriticalPermissions {
             }
         }
         Write-Host $Path
-        return Gather-AccessRights -Path $Path
+        return Gather-AccessRights -ItemPath $Path
     }
     Write-Host $NetworkSharePath
     return Get-AccessRightsRecursively -Path $NetworkSharePath
