@@ -50,14 +50,14 @@ $sharepermissions | Where-Object {
 Retrieves the DACL for a specified file.
 
 ```powershell
-Get-FileDACL -FilePath "C:pathtofile.txt"
+Get-FileDACL -FilePath "\\pwnyfarm.local\netlogon\LAPS.msi"
 ```
 
 ### Get-FileShareOwnershipAndCreator
 Retrieve the owner and creator information from a network share path.
 
 ```powershell
-Get-FileShareOwnershipAndCreator -NetworkSharePath "myservermyshare"
+Get-FileShareOwnershipAndCreator -NetworkSharePath "\\pwnyfarm.local\netlogon"
 ```
 
 ## Notes
