@@ -1,20 +1,21 @@
 <#
 .SYNOPSIS
-Retrieves the access rights for a specified network share path.
+Retrieves the access rights for a specified network share path, filtering by specific rights and excluding certain SIDs.
 
 .DESCRIPTION
-The function fetches the access rights of the specified network share path. 
-It recursively evaluates each file and directory, listing the users/groups and their associated rights.
+This function fetches the access rights of the specified network share path. It recursively evaluates each file and directory, 
+listing the users/groups and their associated rights. The results exclude certain rights and SIDs based on criteria.
 
 .PARAMETER NetworkSharePath
-Specifies the path of the network share to evaluate.
+The path of the network share to evaluate.
 
 .EXAMPLE
-Get-FileShareAccessRights -NetworkSharePath "\\pwnyfarm.local\netlogon"
+Get-FileShareAccessRights -NetworkSharePath "\\example.local\netlogon"
 
 .NOTES
 The function evaluates both files and directories within the specified network share path.
 #>
+
 function Get-FileShareAccessRights {
     [CmdletBinding()]
     param (
@@ -22,6 +23,7 @@ function Get-FileShareAccessRights {
         [string]$NetworkSharePath
     )
 
+    # Converts the FileSystemRights flags to an array of string rights
     function Convert-AccessRightsToArray {
         param (
             [System.Security.AccessControl.FileSystemRights]$Rights
@@ -32,6 +34,7 @@ function Get-FileShareAccessRights {
                Where-Object { $RightsValue -band [int][System.Security.AccessControl.FileSystemRights]::$_ }
     }
 
+    # Recursively gathers access rights from files and directories
     function Get-AccessRightsRecursively {
         param (
             [string]$Path
@@ -39,27 +42,26 @@ function Get-FileShareAccessRights {
 
         function Gather-AccessRights {
             param (
-                [string]$Path
+                [string]$ItemPath
             )
 
-            $Acl = Get-Acl -Path $Path
+            $Acl = Get-Acl -Path $ItemPath
             foreach ($AccessRule in $Acl.Access) {
                 $Username = $AccessRule.IdentityReference.Value
                 $UserSID = $AccessRule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
 
-                # Skip the built-in Administrators group and Local System based on their SIDs
+                # Exclude built-in Administrators and Local System SIDs
                 if ($UserSID -like "*S-1-5-32-544" -or $UserSID -eq "S-1-5-18") {
                     continue
                 }
 
                 $AccessRights = Convert-AccessRightsToArray -Rights $AccessRule.FileSystemRights
 
-                
                 foreach ($Right in $AccessRights) {
-                    # Only add record, if it is an interesting permission
+                    # Filter results by specific rights
                     if ($Right -in @("ChangePermissions", "TakeOwnership", "Write", "AppendData", "CreateFiles", "Delete", "WriteData", "WriteAttributes", "WriteExtendedAttributes")) {
                         [PSCustomObject]@{
-                            Path         = $Path
+                            Path         = $ItemPath
                             Username     = $Username
                             SID          = $UserSID
                             AccessRight  = $Right
@@ -69,8 +71,9 @@ function Get-FileShareAccessRights {
                 }
             }
 
-            if (Test-Path -Path $Path -PathType Container) {
-                Get-ChildItem -Path $Path | ForEach-Object { Gather-AccessRights -Path $_.FullName }
+            # Recurse into directories
+            if (Test-Path -Path $ItemPath -PathType Container) {
+                Get-ChildItem -Path $ItemPath | ForEach-Object { Gather-AccessRights -Path $_.FullName }
             }
         }
 
@@ -79,6 +82,7 @@ function Get-FileShareAccessRights {
 
     return Get-AccessRightsRecursively -Path $NetworkSharePath
 }
+
 
 <#
 .SYNOPSIS
