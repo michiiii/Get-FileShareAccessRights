@@ -61,3 +61,8 @@ Get-FileShareOwnershipAndCreator -NetworkSharePath "\\pwnyfarm.local\netlogon"
 
 Feel free to submit pull requests or issues if you identify any bugs or have suggestions for improvements.
 
+Contributors:
+- @skelsec: Supporting me to do this as accurate as possible :D
+
+## TODO
+- Consider Deny rules in the ACL´s
