@@ -44,7 +44,7 @@ function Get-FileShareCriticalPermissions {
             param (
                 [string]$ItemPath
             )
-
+            Write-Host $ItemPath
             $Acl = Get-Acl -Path $ItemPath
             foreach ($AccessRule in $Acl.Access) {
                 $Username = $AccessRule.IdentityReference.Value
