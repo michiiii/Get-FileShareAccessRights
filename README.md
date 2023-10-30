@@ -12,12 +12,12 @@ This repository provides a collection of PowerShell functions that assist admini
 
 ## Usage
 
-### Get-FileShareCriticalPermissions
-
-Download and import
+### Download and import
 ```powershell
 iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com/michiiii/Get-FileShareAccessRights/main/Get-FileShareAccessRights.ps1')
 ```
+
+### Get-FileShareCriticalPermissions
 
 Retrieve the ACE´s for a specified network share path.
 
