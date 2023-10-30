@@ -331,6 +331,7 @@ function Get-ExploitableSharePermissionsOverview {
     )
 
     # Filter permissions to identify potentially exploitable ones
+    # Please refer to: https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=net-7.0
     $interestingSharePermissions = $SharePermissions | Where-Object {
         ($_.AccessRight -eq "ChangePermissions") -or
         ($_.AccessRight -eq "TakeOwnership") -or
