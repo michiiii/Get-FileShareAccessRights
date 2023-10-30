@@ -10,13 +10,13 @@ listing the users/groups and their associated rights. The results exclude certai
 The path of the network share to evaluate.
 
 .EXAMPLE
-Get-FileShareAccessRights -NetworkSharePath "\\example.local\netlogon"
+Get-FileShareCriticalPermissions -NetworkSharePath "\\example.local\netlogon"
 
 .NOTES
 The function evaluates both files and directories within the specified network share path.
 #>
 
-function Get-FileShareAccessRights {
+function Get-FileShareCriticalPermissions {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true, Position=0, HelpMessage="The network share path to evaluate.")]
