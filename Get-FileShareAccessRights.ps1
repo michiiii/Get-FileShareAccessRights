@@ -45,14 +45,26 @@ function Get-FileShareAccessRights {
             $Acl = Get-Acl -Path $Path
             foreach ($AccessRule in $Acl.Access) {
                 $Username = $AccessRule.IdentityReference.Value
+                $UserSID = $AccessRule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
+
+                # Skip the built-in Administrators group and Local System based on their SIDs
+                if ($UserSID -like "*S-1-5-32-544" -or $UserSID -eq "S-1-5-18") {
+                    continue
+                }
+
                 $AccessRights = Convert-AccessRightsToArray -Rights $AccessRule.FileSystemRights
 
+                
                 foreach ($Right in $AccessRights) {
-                    [PSCustomObject]@{
-                        Path         = $Path
-                        Username     = $Username
-                        AccessRight  = $Right
-                        IsInherited  = $AccessRule.IsInherited
+                    # Only add record, if it is an interesting permission
+                    if ($Right -in @("ChangePermissions", "TakeOwnership", "Write", "AppendData", "CreateFiles", "Delete", "WriteData", "WriteAttributes", "WriteExtendedAttributes")) {
+                        [PSCustomObject]@{
+                            Path         = $Path
+                            Username     = $Username
+                            SID          = $UserSID
+                            AccessRight  = $Right
+                            IsInherited  = $AccessRule.IsInherited
+                        }
                     }
                 }
             }
