@@ -291,6 +291,6 @@ function Get-FileShareOwnershipAndCreator {
         }
     }
 
-    return Gather-OwnershipAndCreator -Path $NetworkSharePath
+    return Gather-OwnershipAndCreator -Path $NetworkSharePath  | Where-Object {($_.Owner -ne "BUILTIN\Administrators") -or $_.Creator -ne "Administrators"}
 }
 
