@@ -20,46 +20,21 @@ iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com
 Retrieve the access rights for a specified network share path.
 
 ```powershell
-$sharePermissions = Get-FileShareCriticalPermissions -NetworkSharePath "\\pwnyfarm.local\netlogon"
-```
-
-Filter for interesting rights
-```powershell
-$interestingSharePermissions = $sharepermissions | Where-Object {
-    ($_.AccessRight -eq "ChangePermissions") -or
-    ($_.AccessRight -eq "TakeOwnership") -or
-    ($_.AccessRight -eq "Write") -or
-    ($_.AccessRight -eq "AppendData") -or
-    ($_.AccessRight -eq "CreateFiles") -or
-    ($_.AccessRight -eq "Delete") -or
-    ($_.AccessRight -eq "WriteData") -or
-    ($_.AccessRight -eq "WriteAttributes") -or
-    ($_.AccessRight -eq "WriteExtendedAttributes")
-}
+$permissions = Get-FileShareCriticalPermissions -NetworkSharePath "\\pwnyfarm.local\netlogon"
 ```
 
 Following that I want to create an overview of which users have how many write permissions
 
 ```powershell
-$interestingSharePermissionsOverview = $interestingSharePermissions | Group-Object -Property Username | Select-Object Name, Count
-$interestingSharePermissionsOverview
+# See users that have potential critical rights
+$permissions | Group-Object -Property Username | Select-Object Name, Count
 ```
 
 Finally, you can filter for intersting user/groups:
 ```powershell
-$sharepermissions | Where-Object {
- ( $_.Username.Contains("Authenticated Users")) -and
- (
-    ($_.AccessRight -eq "ChangePermissions") -or
-    ($_.AccessRight -eq "TakeOwnership") -or
-    ($_.AccessRight -eq "Write") -or
-    ($_.AccessRight -eq "AppendData") -or
-    ($_.AccessRight -eq "CreateFiles") -or
-    ($_.AccessRight -eq "Delete") -or
-    ($_.AccessRight -eq "WriteData") -or
-    ($_.AccessRight -eq "WriteAttributes") -or
-    ($_.AccessRight -eq "WriteExtendedAttributes"))
-}
+$permissions | Where-Object {
+ ( $_.Username.Contains("Authenticated Users"))
+} | Format-Table Path, Username, AccessRight, IsInherited
 ```
 
 ### Get-FileDACL
