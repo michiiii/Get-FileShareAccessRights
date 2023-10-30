@@ -44,7 +44,6 @@ function Get-FileShareCriticalPermissions {
             param (
                 [string]$ItemPath
             )
-            Write-Host $ItemPath
             $Acl = Get-Acl -Path $ItemPath
             foreach ($AccessRule in $Acl.Access) {
                 $Username = $AccessRule.IdentityReference.Value
@@ -70,16 +69,13 @@ function Get-FileShareCriticalPermissions {
                     }
                 }
             }
-            Write-Host $ItemPath
             # Recurse into directories
             if (Test-Path -Path $ItemPath -PathType Container) {
-                Get-ChildItem -Path $ItemPath | ForEach-Object { Gather-AccessRights -Path $_.FullName }
+                Get-ChildItem -Path $ItemPath | ForEach-Object { Gather-AccessRights -ItemPath $_.FullName }
             }
         }
-        Write-Host $Path
-        return Gather-AccessRights -NetworkSharePath $NetworkSharePath
+        return Gather-AccessRights -ItemPath $NetworkSharePath
     }
-    Write-Host $NetworkSharePath
     return Get-AccessRightsRecursively -NetworkSharePath $NetworkSharePath
 }
 
