@@ -70,7 +70,7 @@ function Get-FileShareCriticalPermissions {
                     }
                 }
             }
-
+            Write-Host $ItemPath
             # Recurse into directories
             if (Test-Path -Path $ItemPath -PathType Container) {
                 Get-ChildItem -Path $ItemPath | ForEach-Object { Gather-AccessRights -Path $_.FullName }
@@ -79,7 +79,7 @@ function Get-FileShareCriticalPermissions {
 
         return Gather-AccessRights -Path $Path
     }
-
+    Write-Host $NetworkSharePath
     return Get-AccessRightsRecursively -Path $NetworkSharePath
 }
 
