@@ -50,7 +50,13 @@ function Get-FileShareCriticalPermissions {
                 $UserSID = $AccessRule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
 
                 # Exclude built-in Administrators and Local System SIDs
-                if ($UserSID -like "*S-1-5-32-544" -or $UserSID -eq "S-1-5-18") {
+                # Well known SIDs
+                # Netlogon
+                # $givenSID -match '-520$' 
+                if (($UserSID -eq "*S-1-5-32-544") -or 
+                     $UserSID -eq "S-1-5-18" -or
+                     $UserSID -match '-520$'
+                     ) {
                     continue
                 }
 
