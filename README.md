@@ -6,9 +6,9 @@ The idea to this came after finding file permission issues on SYSVOL and NETLOGO
 
 ## Functions
 
-1. `Get-FileShareCriticalPermissions`: Recursively retrieves the access rights for a specified network share path, listing the users/groups and their associated rights.
+1. `Get-FileShareCriticalPermissions`: Recursively retrieves the ACE´s for a specified network share path, listing the users/groups and their associated rights.
 2. `Get-CriticalPermissionOverview`: Get an overview which users have critical permissions on the share
-3. `Get-CriticalPermissionsByUser`: Get file and folder objects a user has critical permissions to
+3. `Get-CriticalPermissionsByUser`: Get file and folder objects a user/group has critical permissions to
 4. `Get-FileDACL`: Fetches the DACL of a specified file, returning each Access Control Entry (ACE) as an individual object.
 5. `Get-FileShareOwnershipAndCreator`: Recursively fetches the owner and creator (if available) of files and folders from a given network share path.
 
