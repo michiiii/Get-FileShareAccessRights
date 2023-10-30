@@ -4,23 +4,23 @@ This repository provides a collection of PowerShell functions that assist admini
 
 ## Functions
 
-1. `Get-FileShareAccessRights`: Recursively retrieves the access rights for a specified network share path, listing the users/groups and their associated rights.
+1. `Get-FileShareCriticalPermissions`: Recursively retrieves the access rights for a specified network share path, listing the users/groups and their associated rights.
 2. `Get-FileDACL`: Fetches the DACL of a specified file, returning each Access Control Entry (ACE) as an individual object.
 3. `Get-FileShareOwnershipAndCreator`: Recursively fetches the owner and creator (if available) of files and folders from a given network share path.
 
 ## Usage
 
-### Get-FileShareAccessRights
+### Get-FileShareCriticalPermissions
 
 Download and import
 ```powershell
-iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com/michiiii/Get-FileShareAccessRights/main/Get-FileShareAccessRights.ps1')
+iex (New-Object Net.Webclient).downloadstring('https://raw.githubusercontent.com/michiiii/Get-FileShareCriticalPermissions/main/Get-FileShareCriticalPermissions.ps1')
 ```
 
 Retrieve the access rights for a specified network share path.
 
 ```powershell
-$sharePermissions = Get-FileShareAccessRights -NetworkSharePath "\\pwnyfarm.local\netlogon"
+$sharePermissions = Get-FileShareCriticalPermissions -NetworkSharePath "\\pwnyfarm.local\netlogon"
 ```
 
 Filter for interesting rights
